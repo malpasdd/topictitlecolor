@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * titlecolor [English]
+ * titlecolor [Polish]
  *
  * @package language
  * @copyright (c) 2017 DavidIQ.com
@@ -36,7 +36,7 @@ if (empty($lang) || !is_array($lang))
 //
 
 $lang = array_merge($lang, array(
-	'TITLE_COLOUR'                  => 'Title colour',
-	'NO_TITLE_COLOR'                => 'NONE',
+	'TITLE_COLOUR'                  => 'Kolor tytułu',
+	'NO_TITLE_COLOR'		=> 'BRAK',
 ));
 

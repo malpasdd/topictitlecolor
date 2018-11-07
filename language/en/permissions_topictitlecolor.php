@@ -36,7 +36,6 @@ if (empty($lang) || !is_array($lang))
 //
 
 $lang = array_merge($lang, array(
-	'TITLE_COLOUR'                  => 'Title colour',
-	'NO_TITLE_COLOR'                => 'NONE',
+        'ACL_F_TOPICTITLECOLOR_USE'	=> 'Can set title colour',
 ));
 

@@ -2,6 +2,7 @@ services:
     davidiq.topictitlecolor.listener:
         class: davidiq\topictitlecolor\event\main_listener
         arguments:
+            - @auth
             - @user
             - @dbal.conn
             - @template

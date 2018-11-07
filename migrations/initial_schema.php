@@ -17,6 +17,17 @@ class initial_schema extends \phpbb\db\migration\migration
 		return $this->db_tools->sql_table_exists($this->table_prefix . 'topic_title_colors');
 	}
 
+        public function update_data()
+	{
+                return array(
+                        // Add user permissions
+                        array('permission.add', array('f_topictitlecolor_use', false)),
+//                        array('permission.add', array('f_qr_change_subject', false)),
+                        // Set permissions
+                        array('permission.permission_set', array('ROLE_ADMIN_FULL', 'f_topictitlecolor_use')),
+                );
+        }
+        
 	public function update_schema()
 	{
 		return array(

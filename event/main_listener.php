@@ -20,6 +20,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class main_listener implements EventSubscriberInterface
 {
+        /** @var \phpbb\auth\auth */
+	protected $auth;
+
 	/** @var \phpbb\user */
 	protected $user;
 
@@ -49,8 +52,9 @@ class main_listener implements EventSubscriberInterface
 	 * @return \davidiq\topictitlecolor\event\listener
 	 * @access public
 	 */
-	public function __construct(\phpbb\user $user, \phpbb\db\driver\driver_interface $db, \phpbb\template\template $template, \phpbb\request\request $request, $table_prefix)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\user $user, \phpbb\db\driver\driver_interface $db, \phpbb\template\template $template, \phpbb\request\request $request, $table_prefix)
 	{
+                $this->auth = $auth;
 		$this->user = $user;
 		$this->db = $db;
 		$this->template = $template;
@@ -68,6 +72,7 @@ class main_listener implements EventSubscriberInterface
 			'core.viewforum_modify_topicrow'			=> 'viewforum_modify_topicrow',
 			'core.display_forums_before'				=> 'display_forums_before',
 			'core.display_forums_modify_template_vars'	=> 'display_forums_modify_template_vars',
+                        'core.permissions' => 'add_permission',
 		);
 	}
 
@@ -82,6 +87,7 @@ class main_listener implements EventSubscriberInterface
 		$topic_id = false;
 		$topic_first_post_id = false;
 		$post_id = (int) $event['post_id'];
+		$forum_id = $event['forum_id'];
 
 		// See if the current post is the first post
 		if ($mode == 'edit' && $post_id)
@@ -102,10 +108,12 @@ class main_listener implements EventSubscriberInterface
 
 		if ($mode == 'post' || ($post_id > 0 && $post_id == $topic_first_post_id))
 		{
+
+                    var_dump($this->auth->acl_get('f_topictitlecolor_use', $forum_id));
 			$this->user->add_lang_ext('davidiq/topictitlecolor', 'topictitlecolor');
 			$title_color = strtoupper($this->request->variable('title_color', ''));
 			$this->template->assign_vars(array(
-				'S_TOPIC_TITLE_COLOR'	=> true,
+				'S_TOPIC_TITLE_COLOR'           => boolval($this->auth->acl_get('f_topictitlecolor_use', $forum_id)),
 				'TITLE_COLOR'			=> $title_color,
 				'S_TOPIC_PREVIEW'		=> true,
 			));
@@ -311,5 +319,13 @@ class main_listener implements EventSubscriberInterface
 			$list_row[$title_key] = sprintf('<span style="color: #%s !important">%s</span>', $topic_color, $list_row[$title_key]);
 		}
 		return $list_row;
+	}
+        
+        public function add_permission($event)
+	{
+		$permissions = $event['permissions'];
+		$permissions['f_topictitlecolor_use'] = array('lang' => 'ACL_F_TOPICTITLECOLOR_USE', 'cat' => 'post');
+		$event['permissions'] = $permissions;
+//                var_dump($event['permissions']);
 	}
 }
