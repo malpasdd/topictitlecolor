@@ -22,7 +22,6 @@ class initial_schema extends \phpbb\db\migration\migration
                 return array(
                         // Add user permissions
                         array('permission.add', array('f_topictitlecolor_use', false)),
-//                        array('permission.add', array('f_qr_change_subject', false)),
                         // Set permissions
                         array('permission.permission_set', array('ROLE_ADMIN_FULL', 'f_topictitlecolor_use')),
                 );

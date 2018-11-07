@@ -108,8 +108,6 @@ class main_listener implements EventSubscriberInterface
 
 		if ($mode == 'post' || ($post_id > 0 && $post_id == $topic_first_post_id))
 		{
-
-                    var_dump($this->auth->acl_get('f_topictitlecolor_use', $forum_id));
 			$this->user->add_lang_ext('davidiq/topictitlecolor', 'topictitlecolor');
 			$title_color = strtoupper($this->request->variable('title_color', ''));
 			$this->template->assign_vars(array(
